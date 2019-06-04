@@ -83,12 +83,13 @@ namespace Solution
                     }
                     //volt legalább egy olyan számla, amely önmagában elérte a 100 HUF áfát. Ebben az esetben itt aggregálva
                     //azoknak a tételeknek kell szerepelniük, amelyek önmagukban nem érik el a 100 ezer HUF áfát
+                 
                     
-               /* if (item.adoertek > 100 & item.adoertek < 100000)
-                    {
-                        SecondAnswerList.Add(invoice);
-                    }
-                   */ 
+                    //Probably wrong...
+                    if (item.adoertek > 100 & item.adoertek < 100000)
+                        {
+                            SecondAnswerList.Add(invoice);
+                        }
 
                 }
             }
