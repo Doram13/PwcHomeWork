@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="NewDataSet" targetNamespace="http://schemas.nav.gov.hu/2013/szamla" xmlns:mstns="http://schemas.nav.gov.hu/2013/szamla" xmlns="http://schemas.nav.gov.hu/2013/szamla" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:element name="cim">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="iranyitoszam" type="xs:string" minOccurs="0" />
+        <xs:element name="telepules" type="xs:string" minOccurs="0" />
+        <xs:element name="kozterulet_neve" type="xs:string" minOccurs="0" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="szamlak">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="export_datuma" type="xs:string" minOccurs="0" />
+        <xs:element name="export_szla_db" type="xs:string" minOccurs="0" />
+        <xs:element name="kezdo_ido" type="xs:string" minOccurs="0" />
+        <xs:element name="zaro_ido" type="xs:string" minOccurs="0" />
+        <xs:element name="kezdo_szla_szam" type="xs:string" minOccurs="0" />
+        <xs:element name="zaro_szla_szam" type="xs:string" minOccurs="0" />
+        <xs:element name="szamla" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="fejlec" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="szlasorszam" type="xs:string" minOccurs="0" />
+                    <xs:element name="szlatipus" type="xs:string" minOccurs="0" />
+                    <xs:element name="szladatum" type="xs:string" minOccurs="0" />
+                    <xs:element name="teljdatum" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="szamlakibocsato" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="adoszam" type="xs:string" minOccurs="0" />
+                    <xs:element name="nev" type="xs:string" minOccurs="0" />
+                    <xs:element ref="cim" minOccurs="0" maxOccurs="unbounded" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="vevo" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="adoszam" type="xs:string" minOccurs="0" />
+                    <xs:element name="nev" type="xs:string" minOccurs="0" />
+                    <xs:element ref="cim" minOccurs="0" maxOccurs="unbounded" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="termek_szolgaltatas_tetelek" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="termeknev" type="xs:string" minOccurs="0" />
+                    <xs:element name="menny" type="xs:string" minOccurs="0" />
+                    <xs:element name="mertekegys" type="xs:string" minOccurs="0" />
+                    <xs:element name="nettoar" type="xs:string" minOccurs="0" />
+                    <xs:element name="nettoegysar" type="xs:string" minOccurs="0" />
+                    <xs:element name="adokulcs" type="xs:string" minOccurs="0" />
+                    <xs:element name="adoertek" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="modosito_szla" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="eredeti_sorszam" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="nem_kotelezo" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="penznem" type="xs:string" minOccurs="0" />
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="osszesites" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="vegosszeg" minOccurs="0" maxOccurs="unbounded">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="nettoarossz" type="xs:string" minOccurs="0" />
+                          <xs:element name="afaertekossz" type="xs:string" minOccurs="0" />
+                          <xs:element name="bruttoarossz" type="xs:string" minOccurs="0" />
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="cim" />
+        <xs:element ref="szamlak" />
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

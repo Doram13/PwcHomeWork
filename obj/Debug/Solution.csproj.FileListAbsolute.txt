@@ -1,0 +1,10 @@
+C:\Users\doram\Downloads\pwc\PwCHomework\Solution\obj\Debug\Solution.csprojAssemblyReference.cache
+C:\Users\doram\Downloads\pwc\PwCHomework\Solution\obj\Debug\Solution.csproj.CoreCompileInputs.cache
+C:\Users\doram\Downloads\pwc\PwCHomework\Solution\bin\Debug\Solution.exe.config
+C:\Users\doram\Downloads\pwc\PwCHomework\Solution\bin\Debug\Solution.exe
+C:\Users\doram\Downloads\pwc\PwCHomework\Solution\bin\Debug\Solution.pdb
+C:\Users\doram\Downloads\pwc\PwCHomework\Solution\obj\Debug\Solution.exe
+C:\Users\doram\Downloads\pwc\PwCHomework\Solution\obj\Debug\Solution.pdb
+C:\Users\doram\Downloads\pwc\PwCHomework\Solution\bin\Debug\EPPlus.dll
+C:\Users\doram\Downloads\pwc\PwCHomework\Solution\bin\Debug\EPPlus.xml
+C:\Users\doram\Downloads\pwc\PwCHomework\Solution\obj\Debug\Solution.csproj.CopyComplete
