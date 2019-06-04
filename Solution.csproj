@@ -62,6 +62,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Data\result1.xlsx" />
+    <None Include="Data\result2.xlsx" />
     <None Include="Data\source.xsc">
       <DependentUpon>source.xsd</DependentUpon>
     </None>

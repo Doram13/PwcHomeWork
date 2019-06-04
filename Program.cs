@@ -57,6 +57,8 @@ namespace Solution
         private static List<Szamla.szamlakSzamla> FindSecondAnswer(List<Szamla.szamlakSzamla> secondQuestionInvoices)
         {
 
+            //THE ISSUE WITH THE SECOND QUESTION IS PROBABLY HERE DOWN:
+
             List<Szamla.szamlakSzamla> SecondAnswerList = new List<Szamla.szamlakSzamla>();
             //iterate through our collected invoices for the 2nd question
 
@@ -85,12 +87,12 @@ namespace Solution
                     //azoknak a tételeknek kell szerepelniük, amelyek önmagukban nem érik el a 100 ezer HUF áfát
                  
                     
-                    //Probably wrong...
-                    if (item.adoertek > 100 & item.adoertek < 100000)
+                    //Probably wrong:
+                    /*if (item.adoertek > 100 & item.adoertek < 100000)
                         {
                             SecondAnswerList.Add(invoice);
                         }
-
+                    */
                 }
             }
             return SecondAnswerList;
@@ -342,8 +344,10 @@ namespace Solution
                     collectedInvoices.Add(oneSzamla);
                 }
 
+                //PROBABLY SOME ISSUES HERE TOO... with aggregating the Szamla.szamlakSzamlaTermek_szolgaltatas_tetelek!
+
                 // If it's not a unique szamlakibocsato (Not unique adoszam) then aggregate the Tetelek to a single szamlakibocsato
-                
+
                 else
                 {
                     //find the first invoice's index
