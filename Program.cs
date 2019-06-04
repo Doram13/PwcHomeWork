@@ -88,45 +88,73 @@ namespace Solution
                  
                     
                     //Probably wrong:
-                    /*if (item.adoertek > 100 & item.adoertek < 100000)
+                    if (item.adoertek > 100 & item.adoertek < 100000 & !SecondAnswerList.Contains(invoice))
                         {
+
                             SecondAnswerList.Add(invoice);
                         }
-                    */
                 }
             }
             return SecondAnswerList;
         }
 
-        private static void FirstQuestion(List<Szamla.szamlakSzamla> afasSzamla)
+        private static List<Szamla.szamlakSzamla> GetSecondQuestionList()
         {
-            using (ExcelPackage results = new ExcelPackage())
+            //Create List to give back with results
+            List<Szamla.szamlakSzamla> collectedInvoices = new List<Szamla.szamlakSzamla>();
+
+
+            //Aggregate invoices based on szamlakibocsato.adoszam HELYETT VEVO.ADOSZAM!
+            List<string> adoszamList = new List<string>();
+            //Iterate through all the invoices and collect the szamla kibocsatos
+
+            foreach (Szamla.szamlakSzamla oneSzamla in szamlakSzamlaList)
             {
-                results.Workbook.Worksheets.Add("FirstQuestion");
-                
-                //Select first worksheet
-                var excelWorksheet = results.Workbook.Worksheets["FirstQuestion"];
+                string adoszam = oneSzamla.vevo.adoszam;
 
-                //Add header row
-                List<string[]> headerRow = new List<string[]>()
+                // If it's a unique VEVO (unique adoszam) add to collections
+
+                if (!adoszamList.Contains(oneSzamla.vevo.adoszam))
                 {
-                    new string[] { "Vevő adószáma", "Számlaszám", "Nettó végösszeg", "Áfa" }
+                    adoszamList.Add(oneSzamla.vevo.adoszam);
+                    collectedInvoices.Add(oneSzamla);
+                }
 
-                };
-                // Determine the header range (e.g. A1:E1)
-                string headerRange = "A1:" + Char.ConvertFromUtf32(headerRow[0].Length + 64) + "1";
+                //PROBABLY SOME ISSUES HERE TOO... with aggregating the Szamla.szamlakSzamlaTermek_szolgaltatas_tetelek!
 
-                // Popular header row data
-                excelWorksheet.Cells[headerRange].LoadFromArrays(headerRow);
+                // If it's not a unique VEVO (Not unique adoszam) then aggregate the Tetelek to a single VEVO
 
-                FillAdoszamRowWithResult(afasSzamla, excelWorksheet);
-                FillSzámlaszámRowWithResult(afasSzamla, excelWorksheet);
-                FillNettoVegRowWithResult(afasSzamla, excelWorksheet);
-                FillAfaRowWithResult(afasSzamla, excelWorksheet);
-                FileInfo excelFile = new FileInfo(@"C:\Users\doram\Downloads\pwc\PwCHomework\Solution\Data\result1.xlsx");
-                results.SaveAs(excelFile);
+                else
+                {
+                    //find the first invoice's index
+                    int index = collectedInvoices.FindIndex(x => x.vevo.adoszam.Contains(adoszam));
+
+                    //Create a Tetelek List of Arrays where we can collect the diferent Tetelek of one TaxNumber to one Invoice
+
+                    List<Szamla.szamlakSzamlaTermek_szolgaltatas_tetelek[]> Tetelek = new List<Szamla.szamlakSzamlaTermek_szolgaltatas_tetelek[]>();
+
+                    Tetelek.Add(collectedInvoices[index].termek_szolgaltatas_tetelek);
+                    Tetelek.Add(oneSzamla.termek_szolgaltatas_tetelek);
+
+                    //Replace original Tetelek to the new aggregated one
+
+                    Szamla.szamlakSzamlaTermek_szolgaltatas_tetelek[] ujTetel = new Szamla.szamlakSzamlaTermek_szolgaltatas_tetelek[Tetelek.Count()];
+                    int counter = 0;
+                    for (int i = 0; i < ujTetel.Count(); i++)
+                    {
+                        Szamla.szamlakSzamlaTermek_szolgaltatas_tetelek[] oneTetel = new Szamla.szamlakSzamlaTermek_szolgaltatas_tetelek[1];
+                        oneTetel = Tetelek[i];
+                        ujTetel[i] = oneTetel[0];
+                        counter++;
+                    }
+                    collectedInvoices[index].termek_szolgaltatas_tetelek = ujTetel;
+
+                }
             }
+            return collectedInvoices;
         }
+
+        
 
         private static void SecondQuestion(List<Szamla.szamlakSzamla> answers)
         {
@@ -156,6 +184,36 @@ namespace Solution
             }
         }
 
+        private static void FirstQuestion(List<Szamla.szamlakSzamla> afasSzamla)
+        {
+            using (ExcelPackage results = new ExcelPackage())
+            {
+                results.Workbook.Worksheets.Add("FirstQuestion");
+
+                //Select first worksheet
+                var excelWorksheet = results.Workbook.Worksheets["FirstQuestion"];
+
+                //Add header row
+                List<string[]> headerRow = new List<string[]>()
+                {
+                    new string[] { "Vevő adószáma", "Számlaszám", "Nettó végösszeg", "Áfa" }
+
+                };
+                // Determine the header range (e.g. A1:E1)
+                string headerRange = "A1:" + Char.ConvertFromUtf32(headerRow[0].Length + 64) + "1";
+
+                // Popular header row data
+                excelWorksheet.Cells[headerRange].LoadFromArrays(headerRow);
+
+                FillAdoszamRowWithResult(afasSzamla, excelWorksheet);
+                FillSzámlaszámRowWithResult(afasSzamla, excelWorksheet);
+                FillNettoVegRowWithResult(afasSzamla, excelWorksheet);
+                FillAfaRowWithResult(afasSzamla, excelWorksheet);
+                FileInfo excelFile = new FileInfo(@"C:\Users\doram\Downloads\pwc\PwCHomework\Solution\Data\result1.xlsx");
+                results.SaveAs(excelFile);
+            }
+        }
+
         private static void FillVegosszeg(List<Szamla.szamlakSzamla> answers, ExcelWorksheet excelWorksheet)
         {
             var cellData = new List<string>();
@@ -163,6 +221,7 @@ namespace Solution
             string[] vegosszegArray = new string[answers.Count];
             foreach (var szamla in answers)
             {
+                //
                 vegosszegArray[counter] = szamla.osszesites.vegosszeg.nettoarossz.ToString();
                 counter++;
             }
@@ -187,7 +246,7 @@ namespace Solution
             string[] adoszamArray = new string[answers.Count];
             foreach (var szamla in answers)
             {
-                adoszamArray[counter] = szamla.szamlakibocsato.adoszam.ToString();
+                adoszamArray[counter] = szamla.vevo.adoszam.ToString();
                 counter++;
             }
             foreach (var adoszam in adoszamArray)
@@ -322,61 +381,7 @@ namespace Solution
 
             return afasSzamla;
         }
-        private static List<Szamla.szamlakSzamla> GetSecondQuestionList()
-        {
-            //Create List to give back with results
-            List<Szamla.szamlakSzamla> collectedInvoices = new List<Szamla.szamlakSzamla>();
 
-
-            //Aggregate invoices based on szamlakibocsato.adoszam
-            List<string> adoszamList = new List<string>();
-            //Iterate through all the invoices and collect the szamla kibocsatos
-
-            foreach (Szamla.szamlakSzamla oneSzamla in szamlakSzamlaList)
-            {
-                string adoszam = oneSzamla.szamlakibocsato.adoszam;
-                
-                // If it's a unique szamlakibocsato (unique adoszam) add to collections
-                
-                if (!adoszamList.Contains(oneSzamla.szamlakibocsato.adoszam))
-                {
-                    adoszamList.Add(oneSzamla.szamlakibocsato.adoszam);
-                    collectedInvoices.Add(oneSzamla);
-                }
-
-                //PROBABLY SOME ISSUES HERE TOO... with aggregating the Szamla.szamlakSzamlaTermek_szolgaltatas_tetelek!
-
-                // If it's not a unique szamlakibocsato (Not unique adoszam) then aggregate the Tetelek to a single szamlakibocsato
-
-                else
-                {
-                    //find the first invoice's index
-                    int index = collectedInvoices.FindIndex(x => x.szamlakibocsato.adoszam.Contains(adoszam));
-
-                    //Create a Tetelek List of Arrays where we can collect the diferent Tetelek of one TaxNumber to one Invoice
-                    
-                    List<Szamla.szamlakSzamlaTermek_szolgaltatas_tetelek[]> Tetelek = new List<Szamla.szamlakSzamlaTermek_szolgaltatas_tetelek[]>();
-
-                    Tetelek.Add(collectedInvoices[index].termek_szolgaltatas_tetelek);
-                    Tetelek.Add(oneSzamla.termek_szolgaltatas_tetelek);
-
-                    //Replace original Tetelek to the new aggregated one
-
-                    Szamla.szamlakSzamlaTermek_szolgaltatas_tetelek[] ujTetel = new Szamla.szamlakSzamlaTermek_szolgaltatas_tetelek[Tetelek.Count()];
-                    int counter = 0;
-                    for (int i = 0; i < ujTetel.Count(); i++)
-                    {
-                        Szamla.szamlakSzamlaTermek_szolgaltatas_tetelek[] oneTetel = new Szamla.szamlakSzamlaTermek_szolgaltatas_tetelek[1];
-                        oneTetel = Tetelek[i];
-                        ujTetel[i] = oneTetel[0];
-                        counter++;
-                    }
-                    collectedInvoices[index].termek_szolgaltatas_tetelek = ujTetel;
-
-                }
-            }
-            return collectedInvoices;
-        }
 
 
         private static Szamla.szamlak DeserializeXml()
